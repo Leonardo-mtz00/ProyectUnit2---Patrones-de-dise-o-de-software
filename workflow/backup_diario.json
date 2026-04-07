@@ -1,0 +1,9 @@
+{
+  "name": "Backup Diario",
+  "strategy": "secuencial",
+  "tasks": [
+    {"id": 1, "type": "DescargarDatos", "params": {"url": "https://servidor.com/data"}},
+    {"id": 2, "type": "Comprimir", "params": {"nivel": 5}},
+    {"id": 3, "type": "EnviarCorreo", "params": {"destino": "admin@empresa.com"}}
+  ]
+}
