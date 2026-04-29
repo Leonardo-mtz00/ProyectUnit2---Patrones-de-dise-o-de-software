@@ -15,5 +15,44 @@ class EditorMediator(ABC):
     def notificar(self, emisor: Componente, evento: str, datos: dict): # Método para notificar al Mediator sobre un evento ocurrido en un Componente
         pass
 
+# ahora ocupamos los componentes concretos y el Mediator concreto
+
+class Usuario (Componente):
+    """Representa a un desarrollador conectado al editor."""
+    def __init__(self, user_id: str, nombre: str):
+        super().__init__()
+        self.user_id = user_id
+        self.nombre = nombre
+
+    def editar(self, contenido: str, linea: int = 0, col: int = 0):
+        """El usuario hace un cambio en el documento."""
+        print(f"✏️  [{self.nombre}] editando línea {linea}...")
+        self._mediator.notificar(self, "edicion", {
+            "contenido": contenido,
+            "linea": linea,
+            "col": col
+        })
 
 
+class GestorDocumento(Componente):
+    """Administra el estado actual del documento compartido."""
+    def __init__(self):
+        super().__init__()
+        self._contenido = ""
+        self._ultima_edicion: datetime = None
+        self._editor_actual: str = None
+
+    def actualizar(self, contenido: str, usuario: str, linea: int, col: int):
+        self._contenido = contenido
+        self._ultima_edicion = datetime.now()
+        self._editor_actual = usuario
+        # Notifica al mediator que el documento cambió
+        self._mediator.notificar(self, "documento_actualizado", {
+            "contenido": contenido,
+            "usuario": usuario,
+            "linea": linea,
+            "col": col
+        })
+
+    def obtener_contenido(self) -> str:
+        return self._contenido
