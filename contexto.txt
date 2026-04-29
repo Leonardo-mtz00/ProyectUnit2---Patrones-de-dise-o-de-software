@@ -1,0 +1,18 @@
+Primeros avances creados
+
+Es por ello que la IA se va a establecer con una API que vamos a envia la información y la va a regresar
+
+Pendientes: Validar los tokens necesarios y consumo promedio xd
+
+memento : Historial de codigo editado
+mediator: coordinador de usuarios
+flyweight : tokens de sintaxis ?
+decorator : capas del asistente IA
+
+assisstant : Llamadas/controles de la API de IA
+
+document : modelo del documento de codigo
+
+main : El perron del la pelicula
+
+index : editor monaco
