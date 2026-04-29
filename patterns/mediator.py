@@ -123,3 +123,18 @@ class EditorColaborativoMediator(EditorMediator):
             nombre = self._usuarios[user_id].nombre
             del self._usuarios[user_id]
             print(f"🔴🔴🔴 {nombre} se desconectó.")
+
+    def notificar(self, emisor: Componente, evento: str, datos: dict):
+        """Lógica central: qué hacer con cada evento."""
+
+        if evento == "edicion":
+            # 1. Actualizar el documento
+            
+
+        elif evento == "documento_actualizado":
+            # 2. Guardar en historial
+            
+
+        elif evento == "solicitar_ia":
+            # 4. Mandar al asistente (lo implementamos en commit 4)
+            print("🤖 Asistente de IA: (pendiente de implementar)")
