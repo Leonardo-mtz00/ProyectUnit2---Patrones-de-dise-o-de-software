@@ -129,12 +129,30 @@ class EditorColaborativoMediator(EditorMediator):
 
         if evento == "edicion":
             # 1. Actualizar el documento
-            
+            self._gestor_doc.actualizar(
+                contenido=datos["contenido"],
+                usuario=getattr(emisor, "nombre", "desconocido"),
+                linea=datos["linea"],
+                col=datos["col"]
+            )
 
         elif evento == "documento_actualizado":
             # 2. Guardar en historial
-            
+            self._gestor_historial.registrar_cambio(
+                datos["contenido"], datos["linea"], datos["col"]
+            )
+            # 3. Notificar a los demás usuarios
+            self._broadcast(
+                contenido=datos["contenido"],
+                origen=datos["usuario"]
+            )
 
         elif evento == "solicitar_ia":
             # 4. Mandar al asistente (lo implementamos en commit 4)
             print("🤖 Asistente de IA: (pendiente de implementar)")
+
+    def _broadcast(self, contenido: str, origen: str):
+        """Manda el contenido actualizado a todos menos al que editó."""
+        for uid, usuario in self._usuarios.items():
+            if usuario.nombre != origen:
+                usuario.recibir_actualizacion(contenido, origen)
