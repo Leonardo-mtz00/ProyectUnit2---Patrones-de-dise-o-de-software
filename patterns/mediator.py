@@ -101,9 +101,25 @@ class GestorHistorial(Componente): # aqui se apoya en Memento para guardar el hi
 # Clase Mediator concreto
 
 class EditorColaborativoMediator(EditorMediator):
-    
+
     def __init__(self):
         self._usuarios: Dict[str, Usuario] = {}
         self._gestor_doc = GestorDocumento()
         self._gestor_historial = GestorHistorial()
         self._asistente_ia = None  # Lo conectamos en el commit 4
+
+        # Registrar componentes
+        self._gestor_doc.set_mediator(self) # El GestorDocumento necesita notificar al Mediator cuando se actualice el documento
+        self._gestor_historial.set_mediator(self) # El GestorHistorial necesita notificar al Mediator cuando se registre un cambio para que pueda notificar a los usuarios
+
+    def conectar_usuario(self, usuario: Usuario):
+        usuario.set_mediator(self)
+        self._usuarios[usuario.user_id] = usuario
+        print(f"🟢🟢🟢 {usuario.nombre} se conectó. "
+              f"Usuarios activos: {len(self._usuarios)}")
+
+    def desconectar_usuario(self, user_id: str):
+        if user_id in self._usuarios:
+            nombre = self._usuarios[user_id].nombre
+            del self._usuarios[user_id]
+            print(f"🔴🔴🔴 {nombre} se desconectó.")
