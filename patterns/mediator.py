@@ -33,6 +33,16 @@ class Usuario (Componente):
             "col": col
         })
 
+    def solicitar_analisis_ia(self):
+        """El usuario pide sugerencias al asistente de IA."""
+        print(f"🤖 [{self.nombre}] solicita análisis de IA...")
+        self._mediator.notificar(self, "solicitar_ia", {})
+
+    def recibir_actualizacion(self, contenido: str, de_usuario: str):
+        """Recibe cambios de otro usuario."""
+        print(f"📥 [{self.nombre}] recibe cambio de {de_usuario}: "
+              f"'{contenido[:40]}...'")
+
 
 class GestorDocumento(Componente):
     """Administra el estado actual del documento compartido."""
