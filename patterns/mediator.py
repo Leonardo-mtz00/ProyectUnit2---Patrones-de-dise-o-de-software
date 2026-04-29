@@ -1,5 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
+from typing import Dict, List
+from datetime import datetime
 
 class Componente(ABC):
     """Todo lo que se comunica a través del Mediator."""
@@ -66,3 +68,32 @@ class GestorDocumento(Componente):
 
     def obtener_contenido(self) -> str:
         return self._contenido
+
+
+class GestorHistorial(Componente): # aqui se apoya en Memento para guardar el historial de cambios
+    """Escucha cambios y guarda snapshots (se apoya en Memento)."""
+    def __init__(self):
+        super().__init__()
+        from patterns.memento import HistorialDocumento # Importamos aquí para evitar dependencias circulares
+        from editor.document import CodeDocument # Importamos aquí para evitar dependencias circulares
+        self._doc = CodeDocument("sesion_colaborativa") # Creamos un documento específico para esta sesión de colaboración
+        self._historial = HistorialDocumento() # Creamos un historial específico para esta sesión de colaboración
+
+    def registrar_cambio(self, contenido: str, linea: int, col: int):
+        self._doc.escribir(contenido, linea, col)
+        self._historial.guardar(self._doc.guardar_estado()) # Guardamos el estado actual del documento en el historial
+        print(f"💾 Historial: {len(self._historial._historial)} estados guardados.") # Aqui se imprime el historial
+
+    def undo(self):
+        memento = self._historial.undo()
+        if memento:
+            self._doc.restaurar_estado(memento)
+            return self._doc.obtener_contenido()
+        return None
+
+    def redo(self):
+        memento = self._historial.redo()
+        if memento:
+            self._doc.restaurar_estado(memento)
+            return self._doc.obtener_contenido()
+        return None
