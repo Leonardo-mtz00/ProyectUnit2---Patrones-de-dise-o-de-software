@@ -97,3 +97,13 @@ class GestorHistorial(Componente): # aqui se apoya en Memento para guardar el hi
             self._doc.restaurar_estado(memento)
             return self._doc.obtener_contenido()
         return None
+
+# Clase Mediator concreto
+
+class EditorColaborativoMediator(EditorMediator):
+    
+    def __init__(self):
+        self._usuarios: Dict[str, Usuario] = {}
+        self._gestor_doc = GestorDocumento()
+        self._gestor_historial = GestorHistorial()
+        self._asistente_ia = None  # Lo conectamos en el commit 4
