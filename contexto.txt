@@ -15,4 +15,83 @@ document : modelo del documento de codigo
 
 main : El perron del la pelicula
 
-index : editor monaco
+index : editor unicorn
+
+
+COMO ESTA CONSTRUIDO
+
+Editor Colaborativo con Asistente de Refactorización Semántica
+
+Sistema de edición de código en la nube que permite a múltiples desarrolladores
+editar el mismo archivo en tiempo real, asistido por IA para análisis y refactorización.
+
+---
+
+Patrones de Diseño Implementados
+
+| Patrón | Archivo | Rol en el sistema |
+|---|---|---|
+| **Memento** | `patterns/memento.py` | Historial de cambios y Undo/Redo |
+| **Mediator** | `patterns/mediator.py` | Coordinación entre usuarios y componentes |
+| **Flyweight** | `patterns/flyweight.py` | Tokenización eficiente del código |
+| **Decorator** | `patterns/decorator.py` | Capas del asistente de IA |
+
+---
+
+## 🏗️ Arquitectura del Sistema
+[Browser: Monaco Editor]
+│  WebSocket
+▼
+[Backend FastAPI]
+├── Mediator   → coordina usuarios y cambios en tiempo real
+├── Memento    → guarda historial por sesión (Undo/Redo)
+├── Flyweight  → tokeniza sintaxis eficientemente
+└── Decorator stack (Asistente IA)
+├── DecoratorCodeSmells       → detecta malos olores
+├── DecoratorGenerarTests     → genera pruebas unitarias
+└── DecoratorCoherencia       → revisa arquitectura
+
+
+
+------Cómo correr el proyecto
+
+### 1. Clonar el repositorio
+```bash
+git clone <url-del-repo>
+cd editor_colaborativo
+```
+
+### 2. Instalar dependencias
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Configurar API Key
+Crea un archivo `.env` en la raíz:
+Aqui se tendra que poner la API KEY, en este caso de utilizó la de antropic
+
+### 4. Correr el servidor
+```bash
+python -m uvicorn server.main:app --reload
+```
+
+### 5. Abrir el editor
+Entra a **http://localhost:8000/editor** en el navegador.
+
+Para simular colaboración en tiempo real, abre la misma URL en **dos pestañas** con nombres de usuario distintos.
+
+---
+
+## 🤖 Componente de IA
+
+El asistente utiliza la API de **Anthropic (Claude)** y está estructurado con el patrón Decorator:
+
+- **DecoratorCodeSmells** — Detecta malos olores de código (funciones largas, nombres poco descriptivos, etc.)
+- **DecoratorGenerarTests** — Genera pruebas unitarias con `unittest` listas para ejecutarse
+- **DecoratorCoherencia** — Verifica que el código sea coherente con la arquitectura general del proyecto
+
+- **Backend:** Python 3.13, FastAPI, Uvicorn
+- **Frontend:** Monaco Editor (VS Code en el browser)
+- **Tiempo real:** WebSockets
+- **IA:** Anthropic Claude (claude-sonnet-4-20250514)
+- **Patrones:** Memento, Mediator, Flyweight, Decorator
